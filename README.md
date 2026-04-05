@@ -76,7 +76,7 @@ func main() {
 ```
 # Output
 
-![quick_start](github.com/ph4mished/crayon/images/quick_start_merge.png)
+![quick_start](images/quick_start_merge.png)
 ---
 
 # Complete Usage Examples
@@ -111,7 +111,7 @@ func main() {
 
 # Output
 
-![basic_index_merge](github.com/ph4mished/crayon/images/basic_index_merge.png)
+![basic_index_merge](images/basic_index_merge.png)
 ---
 
 ## Basic Text Coloring
@@ -174,7 +174,7 @@ func main(){
 
 # Output
 
-![basic_color_merge](github.com/ph4mished/crayon/images/basic_color_merge.png)
+![basic_color_merge](images/basic_color_merge.png)
 ---
 
 ## Color Toggling
@@ -215,7 +215,7 @@ func main() {
 
 # Output
 
-![color_toggle](github.com/ph4mished/crayon/images/color_toggle_merge.png)
+![color_toggle](images/color_toggle_merge.png)
 ---
 
 ## Advanced Template Examples
@@ -272,7 +272,7 @@ func main() {
 
 # Output
 
-![adv_temp](github.com/ph4mished/crayon/images/adv_temp_merge.png)
+![adv_temp](images/adv_temp_merge.png)
 ---
 
 ## Building Complex UIs
@@ -324,7 +324,7 @@ func main() {
 
 # Output
 
-![complex_ui](github.com/ph4mished/crayon/images/complex_ui_merge.png)
+![complex_ui](images/complex_ui_merge.png)
 ---
 
 ## Project Structure Example
@@ -463,7 +463,7 @@ func main() {
 
 # Output
 
-![cli_app](github.com/ph4mished/crayon/images/cli_app_merge.png)
+![cli_app](images/cli_app_merge.png)
 ---
 
 ## Error Handling in Templates
@@ -523,7 +523,7 @@ func main() {
 
 # Output
 
-![error_handle](github.com/ph4mished/crayon/images/err_handle_merge.png)
+![error_handle](images/err_handle_merge.png)
 ---
 
 ## Pattern to avoid
@@ -746,7 +746,7 @@ go test
 
 # License
 
-MIT License - see [LICENSE](https://github.com/ph4mished/crayon/LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE) file for details.
 
 # Acknowledgments
 
