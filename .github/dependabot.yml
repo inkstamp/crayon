@@ -5,15 +5,21 @@ updates:
     schedule:
       interval: "daily" #"weekly"
       #day: "monday"
-    open-pull-requests-limit: 10
+    #open-pull-requests-limit: 10
     labels:
       - "dependencies"
       #- "automerge"
     
   #also keep github actions updated
-  - package-system: "github-actions"
+  - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-messages:
+      prefix: "ci(deps)"
 
     
