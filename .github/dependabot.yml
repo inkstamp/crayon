@@ -4,36 +4,7 @@ updates:
     directory: "/" # Location of go.mod
     schedule:
       interval: "daily"
-      labels:
-        - "dependencies"
-        - "automerge"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-
-#version: 2
-#updates:
-  #- package-ecosystem: "gomod"
-   # directory: "/" #location of go.mod
-    #schedule:
-     # interval: "daily" #"weekly"
-      #day: "monday"
-    #open-pull-requests-limit: 10
-    #labels:
-      #- "dependencies"
-      #- "automerge"
-    
-  #also keep github actions updated
-  #- package-ecosystem: "github-actions"
-    #directory: "/"
-    #schedule:
-      #interval: "weekly"
-      #day: "monday"
-    #labels:
-     # - "dependencies"
-      #- "github-actions"
-    #commit-messages:
-      #prefix: "ci(deps)"
-
-    
