@@ -3,32 +3,38 @@ package crayon
 import (
 	"fmt"
 	"os"
-	"regexp"
 	"strconv"
 	"strings"
+	"github.com/jwalton/gchalk/pkg/ansistyles" //for true color fallback
 )
-
-// FIXES THAT ARE IN SESSION (NEEDED BEFORE v1.0.0)
-// - 256 fallback if terminal doesnt have true color support [DONE]
 
 //===========================================
 //  COLOR VALIDATION
 //===========================================
+func isHex(hexCode string) bool{
+	for _, ch := range hexCode {
+		if !isHexDigit(byte(ch)){
+			return false
+		}
+	}
+	return true
+}
+
+func isHexDigit(c byte) bool {
+	return c >= '0' && c <= '9' || c >= 'a' && c <= 'f' || c >= 'A' && c <= 'F'
+}
 
 func isValidHex(hexCode string) bool {
-	//fg=#RRGGBB
 	if len(hexCode) == 10 && (strings.HasPrefix(hexCode, "fg=#") || strings.HasPrefix(hexCode, "bg=#")) {
-		matched, _ := regexp.MatchString(`^[0-9a-fA-F]+$`, hexCode[4:])
-		if len(hexCode[4:]) == 6 || matched {
+		if len(hexCode[4:]) == 6 || isHex(hexCode[4:]) {
 			return true
 		}
 	}
 	return false
 }
 
+
 func isValid256Code(paletteCode string) bool {
-	//low = fg=0
-	//high = fg=255
 	if len(paletteCode) >= 4 && len(paletteCode) <= 6 && (strings.HasPrefix(paletteCode, "fg=") || strings.HasPrefix(paletteCode, "bg=")) {
 		parsedInt, err := strconv.Atoi(paletteCode[3:])
 		if err != nil {
@@ -40,9 +46,6 @@ func isValid256Code(paletteCode string) bool {
 }
 
 func isValidRGB(rgbCode string) bool {
-	//low = fg=rgb(r,g,b)
-	//high = fg=rgb(rrr,ggg,bbb)
-
 	//includes positions 3,4,5,6 excludes position 7
 	if len(rgbCode) >= 13 && len(rgbCode) <= 19 && (strings.HasPrefix(rgbCode, "fg=") || strings.HasPrefix(rgbCode, "bg=")) {
 		if !strings.HasPrefix(rgbCode[3:], "rgb(") && !strings.HasSuffix(rgbCode, ")") {
@@ -53,16 +56,14 @@ func isValidRGB(rgbCode string) bool {
 		//true means successfully extracted and are numbers
 		if boolean {
 			for _, num := range seqNumbers {
-				if num >= 0 && num <= 255 {
-					//checks first match and returns
-
-					return true
+				
+				if num <= 0 || num >= 255 {
+					return false
 				}
-				return false
 			}
 		}
 	}
-	return false
+	return true
 }
 
 func supportsTrueColor() bool {
@@ -112,9 +113,14 @@ func parseRGBToAnsiCode(rgbCode string) string {
 	if supportsTrueColor() {
 		return parseAnsi(rgbCode, fmt.Sprintf("2;%d;%d;%d", RGB[0], RGB[1], RGB[2]))
 	}
-	//Use 256 color palette fallback
-	fallBackCode := hexTo256Fallback(rgbToHex(int64(RGB[0]), int64(RGB[1]), int64(RGB[2])))
-	return parseAnsi(rgbCode, fmt.Sprintf("5;%s", fallBackCode))
+	//256 palette fallback
+	if strings.HasPrefix(rgbCode, "fg="){
+	 return ansistyles.Ansi256(ansistyles.RGBToAnsi256(uint8(RGB[0]), uint8(RGB[1]), uint8(RGB[2])))
+	}
+	if strings.HasPrefix(rgbCode, "bg="){
+	 return ansistyles.BgAnsi256(ansistyles.RGBToAnsi256(uint8(RGB[0]), uint8(RGB[1]), uint8(RGB[2])))
+	}
+	return ""
 }
 
 func parseHexToAnsiCode(hexCode string) string {
@@ -127,9 +133,13 @@ func parseHexToAnsiCode(hexCode string) string {
 
 			return parseAnsi(hexCode, fmt.Sprintf("2;%d;%d;%d", R, G, B))
 		}
-		//Use 256 color palette fallback
-		fallBackCode := hexTo256Fallback(hexCode[4:])
-		return parseAnsi(hexCode, fmt.Sprintf("5;%s", fallBackCode))
+		//256 palette fallback
+		if strings.HasPrefix(hexCode, "fg=#"){
+        return ansistyles.Ansi256(ansistyles.HexToAnsi256(hexCode[4:]))
+		}
+		if strings.HasPrefix(hexCode, "bg=#"){
+        return ansistyles.BgAnsi256(ansistyles.HexToAnsi256(hexCode[4:]))
+		}
 	}
 	return ""
 }
@@ -143,7 +153,6 @@ so the second row of number tells what color mode it is (2: rgb(24 bits), 245)
  256 palette support syntax will be [fg=214] = foreground color and [bg=214] = background color*/
 
 func parse256ColorCode(colorCode string) string {
-	fmt.Println("PARSING ANSI")
 	return parseAnsi(colorCode, fmt.Sprintf("5;%s", colorCode[3:]))
 }
 
@@ -170,7 +179,8 @@ func ParseColor(color string) string {
 		return parseHexToAnsiCode(color)
 	}
 
-	if isValidRGB(color) {
+	if isValidRGB(color) /*reads and throws it away*/ {
+		//got no way to use values that isValidRGB read because prefix or color is needed too, hence re-reading it again
 		return parseRGBToAnsiCode(color)
 	}
 	return ""

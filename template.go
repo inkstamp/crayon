@@ -157,6 +157,17 @@ func handleNonColorSequence(parts []TempPart, contentSequence string) []TempPart
 //=============================
 //extract placeholders
 //placeholders will support padding too. [0:<20] = left alignment, [0:>20] = right align
+
+//========= WHY PADDINGS WERE ADOPTED =========
+//crayon added inline padding because doing so with fmt.Printf was close to imposible
+//pad := crayon.Parse("[fg=red]Error: [0][reset]")
+//fmt.Printf("%-20s", pad.Sprint("File Not Found"))
+//This left aligns the whole "Error: File Not Found" instead of only "File Not Found"
+//So crayon opted in for
+// pad := crayon.Parse("[fg=red]Error: [0:<20][reset]")
+//  pad.Println("File Not Found") which correctly left aligns only "File Not Found"
+//========= END =========
+
 //Overflow handling will slow down crayon. I'm still on the fence of throwing it away or using it
 //It will slow down crayon because calculation will be moved to apply, thats not the work of apply
 //[0:<20!] = right alignment  with truncation, [0:>20~] = left align with elipsis(...),
@@ -269,8 +280,6 @@ func allDigits(s string) bool {
 //=============================
 // APPLY
 //=============================
-
-// apply will be a private func
 func (temp CompiledTemplate) apply(args ...any) string {
 	//Calculate estimated size for optimization
 	var totalArgLength int
@@ -305,17 +314,6 @@ func (temp CompiledTemplate) Println(args ...any) {
 
 func (temp CompiledTemplate) Print(args ...any) {
 	fmt.Print(temp.apply(args...))
-}
-
-// =======================
-// EPRINT
-// =======================
-func (temp CompiledTemplate) Eprintln(args ...any) {
-	fmt.Fprintln(os.Stderr, temp.apply(args...))
-}
-
-func (temp CompiledTemplate) Eprint(args ...any) {
-	fmt.Fprint(os.Stderr, temp.apply(args...))
 }
 
 // =======================
