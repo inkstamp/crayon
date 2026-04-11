@@ -38,14 +38,10 @@ func autoDetect() bool {
 	return term.IsTerminal(int(os.Stdout.Fd()))
 }
 
-//[TEMPORARILY]
+
 //for escapes, it will be [<content>] so that anyone can use eg. [12:30] (time literal) without getting errors.
 //such escape will be used for color and styles too
 
-//Escapes
-// [[content]] //needs lookahead and a whole lot of complexities. the parser was made to fight such escape
-//when it was new and needed no escape system.
-// \[content\]  //just prefix and suffix look but may conflict with already existing golang string adages.
 
 //=============================
 // PARSE - LOOP
@@ -80,25 +76,19 @@ func parseLoop(input string, enableColor bool) ([]TempPart, string) {
 	return parts, currentText
 }
 
-//[[content]] will be the accepted escape, the parser checks if its at least 2 chars "[[", same for
-// at least 2 chars "]]"
+
 //=============================
 // PARSE - BRACKET HANDLERS
 //=============================
 
 func handleOpenBracket(i int, input string, parts []TempPart, currentText string) ([]TempPart, string, string, bool) {
 	//check if the next value is "["
-	// [[fg=color]] should never be an escape, because first ']' terminates early without lookahead [WILL BE FIXED]
+	// [[fg=color]] should never be an escape, because first ']' terminates early without lookahead
 	//besides escape is just meant to be an opt in
 
 	//consider first '[' as a text, move until, content is found.
 	if i+1 < len(input) && input[i+1] == '[' {
-		//for escapes
 
-
-		fmt.Println("NEXT INPUT: ", string(input[i+2]))
-		fmt.Println("LAST INPUT: ", string(input[len(input)-6:]))
-		fmt.Println("Text: ", currentText)
 		currentText += "["
 		return parts, currentText, "", false
 	}
@@ -109,6 +99,7 @@ func handleOpenBracket(i int, input string, parts []TempPart, currentText string
 
 func handleCloseBracket(contentSequence string, parts []TempPart, enableColor bool) ([]TempPart, bool) {
 	allWords := strings.Fields(contentSequence)
+	//fmt.Println("All wORDS: ", allWords)
 
 	if isColorSequence(allWords) {
 		parts = handleColorSequence(parts, allWords, enableColor)
@@ -170,13 +161,22 @@ func handleNonColorSequence(parts []TempPart, contentSequence string) []TempPart
 //placeholders will support padding too. [0:<20] = left alignment, [0:>20] = right align
 
 //========= WHY PADDINGS WERE ADOPTED =========
-//crayon added inline padding because doing so with fmt.Printf was close to imposible
+//crayon added inline padding because doing so with fmt.Printf was cumbersome considering repeated output
 //pad := crayon.Parse("[fg=red]Error: [0][reset]")
-//fmt.Printf("%-20s", pad.Sprint("File Not Found"))
-//This left aligns the whole "Error: File Not Found" instead of only "File Not Found"
-//So crayon opted in for
+//using fmt.Printf("%-20s", pad.Sprint("File Not Found"))
+//This left aligns the whole "\033[31mError: File Not Found\033[0m" instead of only "File Not Found"
+
+//Although there's a fix, its verbose and less readable.
+// use pad.Println(fmt.Sprintf("%-20s", "File Not Found"))
+
+//So crayon opted for
 // pad := crayon.Parse("[fg=red]Error: [0:<20][reset]")
 //  pad.Println("File Not Found") which correctly left aligns only "File Not Found"
+
+//crayon's padding is nothing special, it just does this
+//padIt := fmt.Sprintf("%-20s", "File Not Found") in the backend
+// pad.Println(padIt)
+//Saving you less typing strokes and effiecient for repeated outputs
 //========= END =========
 
 //Overflow handling will slow down crayon. I'm still on the fence of throwing it away or using it
@@ -227,8 +227,6 @@ func handlePaddedPlaceholder(parts []TempPart, contentSequence string) []TempPar
 // =============================
 // PARSE - ESCAPE
 // =============================
-// This is only a temporary escape [<content>] => <content> 
-// This will be the main escape [[content]]
 // strip it of its angle brackets
 func handleEscape(parts []TempPart, contentSequence string) []TempPart {
 	contentSequence = strings.TrimPrefix(contentSequence, "<")

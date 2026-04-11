@@ -1,6 +1,6 @@
 package crayon
 
-var ColorMap = map[string]string{
+var colorMap = map[string]string{
 	// Foreground colors
 	"fg=black":        "30",
 	"fg=red":          "31",
@@ -38,7 +38,7 @@ var ColorMap = map[string]string{
 	"bg=lwhite":   "107",
 }
 
-var ResetMap = map[string]string{
+var resetMap = map[string]string{
 	//these are the reset colors for foreground and background colors
 	"reset":           "0",  //reset all styles
 	"fg=reset":        "39", //resets foreground colors
@@ -54,7 +54,7 @@ var ResetMap = map[string]string{
 	"strike=reset":  "29",
 }
 
-var StyleMap = map[string]string{
+var styleMap = map[string]string{
 	//styles
 	"bold":             "1", //bold/bright
 	"dim":              "2", //dim/faint
@@ -66,4 +66,27 @@ var StyleMap = map[string]string{
 	"hidden":           "8",
 	"strike":           "9", //strike-through,
 	"underline=double": "21",
+}
+
+
+//256-color palette to ansi16 lookup table adapted from jwalton (source: https://github.com/jwalton/gchalk/blob/master/pkg/ansistyles/ansi256lut.go)
+   var ansi256ToAnsi16Lut = []uint8{
+	// Standard colors
+	30, 31, 32, 33, 34, 35, 36, 37, 90, 91, 92, 93, 94, 95, 96, 97,
+	// Colors
+	30, 30, 30, 34, 34, 34, 30, 30, 34, 34, 34, 34, 32, 32, 90, 34, 34, 34,
+	32, 32, 36, 36, 36, 36, 32, 32, 36, 36, 36, 36, 32, 32, 92, 36, 36, 36,
+	30, 30, 30, 34, 34, 34, 30, 30, 90, 34, 34, 34, 32, 90, 90, 90, 94, 94,
+	32, 32, 90, 36, 36, 94, 32, 32, 92, 36, 36, 96, 32, 92, 92, 92, 96, 96,
+	30, 30, 90, 90, 34, 94, 31, 90, 90, 90, 94, 94, 90, 90, 90, 90, 94, 94,
+	33, 90, 90, 90, 94, 94, 33, 92, 92, 92, 96, 96, 92, 92, 92, 92, 96, 96,
+	31, 31, 90, 35, 35, 35, 31, 31, 90, 35, 35, 35, 31, 90, 90, 90, 94, 94,
+	33, 33, 90, 37, 37, 94, 33, 33, 92, 37, 37, 37, 33, 92, 92, 92, 37, 96,
+	31, 31, 31, 35, 35, 35, 31, 31, 91, 35, 35, 35, 31, 91, 91, 35, 35, 95,
+	33, 33, 91, 37, 37, 95, 33, 33, 93, 37, 37, 37, 33, 93, 93, 93, 37, 97,
+	31, 31, 91, 35, 35, 35, 31, 91, 91, 35, 35, 95, 31, 91, 91, 91, 95, 95,
+	33, 91, 91, 91, 95, 95, 33, 93, 93, 93, 37, 97, 33, 93, 93, 93, 97, 97,
+	// Greyscale
+	30, 30, 30, 30, 30, 90, 90, 90, 90, 90, 90, 90,
+	90, 90, 90, 37, 37, 37, 37, 37, 37, 37, 97, 97,
 }

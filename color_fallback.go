@@ -252,6 +252,10 @@ package crayon
     ["255", "eeeeee"],
 ]*/
 
+
+
+//Tried delta walking
+
 import (
 	"fmt"
 	"strconv"
@@ -291,6 +295,7 @@ func concat(elements ...any) []int {
 	return result
 }
 
+//was not used because it was so static and rigid.
 func hexTo256Fallback(hexCode string) string {
 	startDelta := concat(0)
 	basePattern := concat(95, 40, 40, 40, 40)

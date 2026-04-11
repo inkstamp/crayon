@@ -1,10 +1,11 @@
+
 package main
 
-import "github.com/ph4mished/crayon"
+import "github.com/phamio/crayon"
 
 func main(){
   // Simple colored text
-  crayon.Parse("[fg=green]Success message![reset]").Println()
+  crayon.Parse("[fg=blue]][Success] [fg=3]message [fg=#ffff00][copied][fg=rgb(255,255,0)][done][reset]").Println()
   crayon.Parse("[fg=red bold]Error: Something went wrong![reset]").Println()
   crayon.Parse("[fg=cyan italic]Info message[reset]").Println()
 

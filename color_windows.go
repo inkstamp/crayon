@@ -12,6 +12,7 @@ func init() {
 	stdout := windows.Handle(windows.Stdout)
 	var mode uint32
 	if err := windows.GetConsoleMode(stdout, &mode); err != nil {
+		//if it fails, just strip off colors
 		return
 	}
 
