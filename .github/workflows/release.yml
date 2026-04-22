@@ -15,7 +15,7 @@ jobs:
       - name: Extract changelog section
         id: changelog
         run: |
-          VERSION = ${GITHUB_REF_NAME#v}
+          VERSION=${GITHUB_REF_NAME#v}
           NOTES=$(awk "/^## \[$VERSION\]/{found=1; next} /^## \[/{if(found) exit} found{print}]" CHANGELOG.md)
           echo "notes<<EOF" >> $GITHUB_OUTPUT
           echo "$NOTES" >> $GITHUB_OUTPUT
