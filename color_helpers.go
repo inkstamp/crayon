@@ -199,8 +199,11 @@ func parseRGBToAnsiCode(rgbCode string, RGB []int) string {
 	if supports256Color(){
 		return parseAnsi(rgbCode, fmt.Sprintf("5;%d", rgbTo256Index(RGB[0], RGB[1], RGB[2])), false)
 	}
+	if !supportsNone() {
 	//ansi 16 fallback
 	return parseAnsi(rgbCode, fmt.Sprint(ansi256ToAnsi16Lut[rgbTo256Index(RGB[0], RGB[1], RGB[2])]), true)
+	}
+	return ""
 }
 
 func parseHexToAnsiCode(hexCode string) string {
@@ -223,7 +226,10 @@ func parse256ColorCode(colorCode string, paletteCode int) string {
 	if supports256Color(){
 		return parseAnsi(colorCode, fmt.Sprintf("5;%d", paletteCode), false)
 	}
+	if !supportsNone() {
 	return parseAnsi(colorCode, fmt.Sprint(ansi256ToAnsi16Lut[paletteCode]), true)
+	}
+	return ""
 }
 
 
