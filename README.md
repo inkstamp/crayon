@@ -490,5 +490,5 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - The Go community for testing and feedback
 - All contributors who have helped improve this library
 
-
-
+# Philosophy:
+*Define once, reuse many times, render correctly everywhere.*
