@@ -337,6 +337,22 @@ func TestParseRGB(t *testing.T) {
 // PARSE ANSI TESTS
 // =============================
 
+func TestParseAnsi16_ForeGround(t *testing.T) {
+	result := parseAnsi16("fg=cyan", "36")
+	expected := "\033[36m"
+	if result != expected {
+		t.Errorf("parseAnsi(fg) = %q, expected %q", result, expected)
+	}
+}
+
+func TestParseAnsi16_BackGround(t *testing.T) {
+	result := parseAnsi16("bg=31", "90")
+	expected := "\033[100m"
+	if result != expected {
+		t.Errorf("parseAnsi(bg) = %q, expected %q", result, expected)
+	}
+}
+
 func TestParseAnsi_Foreground(t *testing.T) {
 	result, _ := colorMap["fg=red"]
 	expected := "31"
@@ -346,7 +362,7 @@ func TestParseAnsi_Foreground(t *testing.T) {
 }
 
 func TestParseAnsi_ForegroundTruecolor(t *testing.T) {
-	result := parseAnsi("fg=red", "2;255;0;0", false)
+	result := parseAnsi("fg=red", "2;255;0;0")
 	expected := "\033[38;2;255;0;0m"
 	if result != expected {
 		t.Errorf("parseAnsi(fg truecolor) = %q, expected %q", result, expected)
@@ -362,7 +378,7 @@ func TestParseAnsi_Background(t *testing.T) {
 }
 
 func TestParseAnsi_BackgroundTruecolor(t *testing.T) {
-	result := parseAnsi("bg=blue", "2;0;0;255", false)
+	result := parseAnsi("bg=blue", "2;0;0;255")
 	expected := "\033[48;2;0;0;255m"
 	if result != expected {
 		t.Errorf("parseAnsi(bg truecolor) = %q, expected %q", result, expected)
@@ -370,7 +386,7 @@ func TestParseAnsi_BackgroundTruecolor(t *testing.T) {
 }
 
 func TestParseAnsi_Invalid(t *testing.T) {
-	result := parseAnsi("invalid", "31", true)
+	result := parseAnsi("invalid", "31")
 	expected := ""
 	if result != expected {
 		t.Errorf("parseAnsi(invalid) = %q, expected %q", result, expected)

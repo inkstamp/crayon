@@ -15,10 +15,10 @@ go get -u github.com/phamio/crayon
 - Multiple Color Systems: Named colors, hex codes, RGB, 256-color palette.
 - Full ColorFallback Chain: Automatic downsampling across all color levels — truecolor -> 256 color palette -> ANSI 16 colors.
 - TrueColor Detection: Automatic detection of terminal truecolor support.
-- Simples and Readable: Easy-to-use template system for text styling and coloring.
+- Simple Template System: Easy-to-use template system for text styling and coloring.
 - Comprehensive Styles: Bold, italic, underline, blink, reverse, hidden, strike-through.
 - Granular Resets: Individual and full reset codes for precise control.
-- Escape System: Texts in [] that aren't colors/styles are left as it is.
+- No Escapes Needed: Texts in [] that aren't colors/styles are left as it is.
 - Inline Padding: Left and right alignment, declared directly on placeholders.
 - Cross-Platform: Full color support on Windows (Windows Terminal, cmd, PowerShell), Linux and macOS.
 - Color Toggling: Respects NO_COLOR environment variable and detects when output is redirected.

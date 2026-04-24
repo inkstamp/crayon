@@ -10,6 +10,7 @@ import (
 func main(){
 	for i:=1; i<=255; i++{
 	   fmt.Print("NUM: ", i)
-	    crayon.Parse("[fg=" + strconv.Itoa(i) + "] COLOR[reset]  [bg=" + strconv.Itoa(i) + "]BACKGROUND[reset]").Println()
+	    //crayon.Parse("[fg=" + strconv.Itoa(i) + "] COLOR[reset]  [bg=" + strconv.Itoa(i) + "]BACKGROUND[reset]").Println()
+	    crayon.Parse("[fg=" + strconv.Itoa(i) + "] COLOR[reset]  [bg=" + strconv.Itoa(i) + "]   " + strconv.Itoa(i) + "  [reset]").Println()
 	}
 }

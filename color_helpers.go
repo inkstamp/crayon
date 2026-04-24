@@ -186,20 +186,24 @@ func parseRGB(rgbCode string) ([]int, bool) {
 // ======================================
 // COLOR PARSING
 // ======================================
-func parseAnsi(colorCode string, ansiAppend string, isAnsi16 bool) string {
+func parseAnsi16(colorCode, ansiAppend string) string {
+	if strings.HasPrefix(colorCode, "bg="){
+		ansiInt, _ := strconv.Atoi(ansiAppend)
+		ansiInt = ansiInt + 10
+		return fmt.Sprintf("\033[%dm", ansiInt)
+	} else if strings.HasPrefix(colorCode, "fg") {
+		return fmt.Sprintf("\033[%sm", ansiAppend)
+	}
+	return ""
+}
+
+
+func parseAnsi(colorCode, ansiAppend string) string {
 
 	if strings.HasPrefix(colorCode, "bg=") {
-		if isAnsi16{
-			ansiInt, _ := strconv.Atoi(ansiAppend)
-		    ansiInt = ansiInt + 10
-	    	return fmt.Sprintf("\033[%dm", ansiInt)
-		}
 		return fmt.Sprintf("\033[48;%sm", ansiAppend)
 
 	} else if strings.HasPrefix(colorCode, "fg=") {
-		if isAnsi16{
-			return fmt.Sprintf("\033[%sm", ansiAppend)
-		}
 		return fmt.Sprintf("\033[38;%sm", ansiAppend)
 	}
     
@@ -208,15 +212,15 @@ func parseAnsi(colorCode string, ansiAppend string, isAnsi16 bool) string {
 
 func parseRGBToAnsiCode(rgbCode string, RGB []int) string {
 	if supportsTrueColor() {
-		return parseAnsi(rgbCode, fmt.Sprintf("2;%d;%d;%d", RGB[0], RGB[1], RGB[2]), false)
+		return parseAnsi(rgbCode, fmt.Sprintf("2;%d;%d;%d", RGB[0], RGB[1], RGB[2]))
 	}
 	//256 palette fallback
 	if supports256Color(){
-		return parseAnsi(rgbCode, fmt.Sprintf("5;%d", rgbTo256Index(RGB[0], RGB[1], RGB[2])), false)
+		return parseAnsi(rgbCode, fmt.Sprintf("5;%d", rgbTo256Index(RGB[0], RGB[1], RGB[2])))
 	}
 	if !supportsNone() {
 	//ansi 16 fallback
-	return parseAnsi(rgbCode, fmt.Sprint(ansi256ToAnsi16Lut[rgbTo256Index(RGB[0], RGB[1], RGB[2])]), true)
+	return parseAnsi16(rgbCode, fmt.Sprint(ansi256ToAnsi16Lut[rgbTo256Index(RGB[0], RGB[1], RGB[2])]))
 	}
 	return ""
 }
@@ -239,10 +243,10 @@ so the second row of number tells what color mode it is (2: rgb(24 bits), 245)
 
 func parse256ColorCode(colorCode string, paletteCode int) string {
 	if supports256Color(){
-		return parseAnsi(colorCode, fmt.Sprintf("5;%d", paletteCode), false)
+		return parseAnsi(colorCode, fmt.Sprintf("5;%d", paletteCode))
 	}
 	if !supportsNone() {
-	return parseAnsi(colorCode, fmt.Sprint(ansi256ToAnsi16Lut[paletteCode]), true)
+	return parseAnsi16(colorCode, fmt.Sprint(ansi256ToAnsi16Lut[paletteCode]))
 	}
 	return ""
 }

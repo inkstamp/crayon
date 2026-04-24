@@ -18,7 +18,7 @@
 //   - Simple Template System: Easy-to-use templates with placeholders
 //   - Comprehensive Styles: Bold, italic, underline, blink, reverse, hidden, strike-through
 //   - Granular Resets: Individual and full reset codes for precise control
-//   - Escape System: Texts in [] that aren't colors/styles are left as-is
+//   - No Escapes Needed: Texts in [] that aren't colors/styles are left as-is
 //   - Inline Padding: Left and right alignment directly on placeholders
 //   - Cross-Platform: Full support for Windows Terminal, cmd, PowerShell, Linux, and macOS
 //   - Color Toggling: Respects NO_COLOR environment variable and TTY detection
