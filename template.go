@@ -97,12 +97,12 @@ func handleCloseBracket(contentSequence string, parts []TempPart, enableColor bo
 // PARSE - SEQUENCE HANDLERS
 //=============================
 
-func isColorSequence(words []string) bool {
-	if len(words) == 0 {
+func isColorSequence(allWords []string) bool {
+	if len(allWords) == 0 {
 		return false
 	}
-	for _, w := range words {
-		if !isSupportedColor(w) {
+	for _, word := range allWords {
+		if !isSupportedColor(word) {
 			return false
 		}
 	}
@@ -126,7 +126,7 @@ func handleNonColorSequence(parts []TempPart, contentSequence string) []TempPart
 	}
 
 	//for padded placeholders
-	if strings.Contains(contentSequence, ":") && !strings.HasPrefix(contentSequence, "<") && !strings.HasSuffix(contentSequence, ">") {
+	if strings.Contains(contentSequence, ":"){
 		return handlePaddedPlaceholder(parts, contentSequence)
 	}
 
@@ -237,7 +237,7 @@ func buildFormatStr(align rune, width int) string {
 
 func flushText(parts []TempPart, currentText string) []TempPart {
 	if len(currentText) > 0 {
-		parts = append(parts, TempPart{Text: currentText, Index: -1})
+		parts = append(parts, TempPart{Text: currentText, Index: -1, FormatStr: ""})
 	}
 	return parts
 }

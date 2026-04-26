@@ -252,6 +252,10 @@ func parse256ColorCode(colorCode string, paletteCode int) string {
 }
 
 
+
+//==============================
+// COLOR DISPATCHING
+//==============================
 func parseColor(color string) string {
 	//this function is meant to receive string like "bold" "fg=red" and other colors and
 	//convert them to their ansi codes
