@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	//use github.com/phamio/termcolor must stay out of users way
 )
 
 
